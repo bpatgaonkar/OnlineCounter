@@ -32,7 +32,7 @@ public class ProductController {
     public @ResponseBody List<Product> getAllProduct(ModelMap model) {
         return productService.getAllProducts();
     }
-    @RequestMapping(value="/{productId}", method = RequestMethod.GET)
+    @RequestMapping(value="/{productId}",produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.GET)
     public @ResponseBody Product getProduct(@PathVariable String productId) {
         System.out.println("++++ productid "+productId);
         System.out.println("++++ productService "+productService);

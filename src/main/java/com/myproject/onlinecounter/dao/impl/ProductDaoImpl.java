@@ -10,6 +10,7 @@ import com.myproject.onlinecounter.model.Product;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -29,8 +30,10 @@ public class ProductDaoImpl implements ProductDao{
     @Override
     public Product getProduct(Integer productId) {
        Session session = sessionFactory.getCurrentSession();
-       Product product = (Product)session.load(Product.class, productId);
-       return product;
+       return (Product)session.createCriteria(Product.class)
+               .add(Restrictions.eq("productid", productId.intValue())).uniqueResult();
+       //System.out.println("product++++ "+product);
+       //return product;
     }
 
     @Override
