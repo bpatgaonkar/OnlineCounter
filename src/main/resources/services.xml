@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!-- Declarative Transaction Management through AOP -->
+    <!-- AOP configuration -->
+    <aop:aspectj-autoproxy />
+    <aop:config>
+    	<!-- aop point-cut declaration with matching join-point -->
+        <aop:pointcut id="serviceMethods"
+                expression="execution(* com.myproject.onlinecounter.controller.*.*(..))"/>
+		<aop:pointcut id="daoMethods"
+                expression="execution(* com.myproject.onlinecounter.dao.*.*.*(..)) 
+                            "/> <!-- or execution(* com.myproject.onlinecounter.service.*.*.*(..)) -->
+		<!-- aop point-cut waiving / applying -->                
+        <aop:advisor advice-ref="txAdviceRequired" pointcut-ref="serviceMethods"/>
+        <aop:advisor advice-ref="txAdviceSupports" pointcut-ref="daoMethods"/>
+    </aop:config>
+
+	<tx:advice id="txAdviceSupports" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="SUPPORTS" />
+        </tx:attributes>
+    </tx:advice>
+	
+    <tx:advice id="txAdviceRequired" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!--  Converter -->
+    <bean id="jsonConverter"  class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+ 		<property name="supportedMediaTypes">
+ 			<list>
+ 				<value>application/json</value>
+ 			</list>
+ 		</property>
+		<property name="objectMapper">
+                    <bean class="com.myproject.onlinecounter.controller.HibernateAwareObjectMapper" />
+                </property> 		
+    </bean>  
+    
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+    <bean
+  class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+           <list>
+              <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+              <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+              <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+              <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+              <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+              <ref bean="jsonConverter" />
+           </list>
+        </property>    
+    </bean>
+        
+    <!-- Services -->
+    <bean id="productService" class="com.myproject.onlinecounter.service.impl.ProductServiceImpl">
+        <property name="productDao" ref="productDao"/>
+    </bean>
+    <!--
+    <bean id="productController" class="com.myproject.onlinecounter.controller.ProductController">
+        <property name="productService" ref="productService"/>
+    </bean> 
+    -->   	
+</beans>    

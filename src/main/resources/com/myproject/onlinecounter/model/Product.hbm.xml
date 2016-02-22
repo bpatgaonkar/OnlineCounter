@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 21, 2016 10:19:30 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.myproject.onlinecounter.model.Product" table="PRODUCT" optimistic-lock="version">
+        <id name="productid" type="int">
+            <column name="PRODUCTID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" />
+        </property>
+
+        <property name="height" type="java.lang.Integer">
+            <column name="HEIGHT" precision="5" scale="0" />
+        </property>
+        <property name="width" type="java.lang.Integer">
+            <column name="WIDTH" precision="5" scale="0" />
+        </property>
+        <property name="color" type="string">
+            <column name="COLOR" />
+        </property>
+        <property name="price" type="java.lang.Integer">
+            <column name="PRICE" precision="5" scale="0" />
+        </property>
+        
+        <many-to-one name="category" class="com.myproject.onlinecounter.model.Category" 
+                     column="categoryid" unique="true" />
+
+    </class>
+</hibernate-mapping>

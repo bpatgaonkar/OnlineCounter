@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 21, 2016 10:19:30 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.myproject.onlinecounter.model.Orders" table="ORDERS" optimistic-lock="version">
+        <id name="orderid" type="int">
+            <column name="ORDERID" precision="5" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="totalwithouttax" type="int">
+            <column name="TOTALWITHOUTTAX" precision="5" scale="0" not-null="true" />
+        </property>
+        <property name="totalsalestax" type="int">
+            <column name="TOTALSALESTAX" precision="5" scale="0" not-null="true" />
+        </property>
+        <set name="items" inverse="true" order-by="itemid desc"> 
+            <key column="itemid"/> 
+            <one-to-many class="com.myproject.onlinecounter.model.Orderitem"/> 
+        </set>
+    </class>
+</hibernate-mapping>
