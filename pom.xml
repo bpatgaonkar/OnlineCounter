@@ -8,7 +8,7 @@
     <name>OnlineCounter Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <properties>  
-        <spring.version>4.3.17.RELEASE</spring.version> 
+        <spring.version>4.3.18.RELEASE</spring.version> 
         <hibernate.version>3.5.4-Final</hibernate.version> 
         <mockit.version>1.9.5</mockit.version>
         <junit.version>4.11</junit.version>
